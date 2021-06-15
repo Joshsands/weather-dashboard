@@ -1,12 +1,11 @@
 var cityNameEl = document.getElementById("city-name")
 var searchEl = document.getElementById("search-btn")
+var weatherPicEl = document.getElementById("weather-pic")
 var cityTitleEl = document.getElementById("city-title")
 var tempEl = document.getElementById("temp")
 var windEl = document.getElementById("wind")
 var humidityEl = document.getElementById("humidity")
 var uvIndexEl = document.getElementById("uv-index")
-
-console.log(searchEl)
 
 var callWeather = function (cityName) {
     var apiKey = "3730bc87fdb6ced4e16339afdd4e357b"
@@ -17,8 +16,10 @@ var callWeather = function (cityName) {
     // request was successful
     if (response.ok) {
       response.json().then(function(data) {
-
-        cityTitleEl.innerHTML = "City Name: " + cityName;
+        var currentDate = moment().format("L")
+        var weatherPic = data.weather[0].icon
+        weatherPicEl.setAttribute("src", "https://openweathermap.org/img/wn/" + weatherPic + ".png");
+        cityTitleEl.innerHTML = data.name + " (" + currentDate + ")";
         tempEl.innerHTML = "Temp: " + kelvinToFahrenheit(data.main.temp) + "℉";
         windEl.innerHTML = "Wind: " + data.wind.speed + " MPH";
         humidityEl.innerHTML = "Humidity: " + data.main.humidity + " %";
@@ -27,11 +28,11 @@ var callWeather = function (cityName) {
 var lat = data.coord.lat;
 var lon = data.coord.lon;
 var uvApi = "https://api.openweathermap.org/data/2.5/onecall?lat="+ lat +"&lon=" + lon + "&exclude=hourly,daily,minutely&appid=" +apiKey;
+
 fetch(uvApi).then(function(response) { 
   // request was successful
   if (response.ok) {
     response.json().then(function(data) {
-        console.log(data.current.uvi)
 
         var uvIndex = document.createElement("span");
 
