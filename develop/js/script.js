@@ -8,6 +8,10 @@ var humidityEl = document.getElementById("humidity")
 var uvIndexEl = document.getElementById("uv-index")
 var cityColEl = document.getElementById("city-col")
 var forecastEl = document.getElementsByClassName("forecast")
+var historySaved = [];
+var searchHistory = JSON.parse(localStorage.getItem("savedCity"))
+var clearButtonEl = document.getElementById("clear-btn")
+
 
 var callWeather = function (cityName, check) {
     var apiKey = "3730bc87fdb6ced4e16339afdd4e357b"
@@ -16,6 +20,7 @@ var callWeather = function (cityName, check) {
   fetch(weatherApi).then(function(response) { 
     // request was successful
     if (response.ok) {
+
       response.json().then(function(data) {
         var currentDate = moment().format("L")
         var weatherPic = data.weather[0].icon
@@ -31,13 +36,16 @@ var callWeather = function (cityName, check) {
         savedButton.classList = ("btn btn-secondary");
         savedButton.textContent = data.name;
         cityColEl.append(savedButton);
+
+        historySaved.push(cityName);
+        localStorage.setItem("savedCity", JSON.stringify(historySaved));
         }
 
 // for calling UV Index
 var lat = data.coord.lat;
 var lon = data.coord.lon;
 var uvApi = "https://api.openweathermap.org/data/2.5/onecall?lat="+ lat +"&lon=" + lon + "&exclude=hourly,daily,minutely&appid=" +apiKey;
-console.log(uvApi)
+
 fetch(uvApi).then(function(response) { 
   // request was successful
   if (response.ok) {
@@ -66,7 +74,7 @@ fetch(uvApi).then(function(response) {
 // call forecast data
 var cityID = data.id;
 var forecastApi = "https://api.openweathermap.org/data/2.5/forecast?id=" + cityID + "&appid=" + apiKey;
-console.log(forecastApi)
+
 fetch(forecastApi).then(function(response) { 
     // request was successful
     if (response.ok) {
@@ -77,7 +85,7 @@ fetch(forecastApi).then(function(response) {
               forecastEl[i].innerHTML = "";
               forecastdate = moment().add(i + 1, "d").format("L")
               forecastdateEl = document.createElement("p")
-              forecastdateEl.classList = ("mt-3 mb-0")
+              forecastdateEl.classList = ("mb-0 h5")
               forecastdateEl.innerHTML = (forecastdate)
 
               forecastImgEl = document.createElement("img")
@@ -119,11 +127,20 @@ searchEl.addEventListener("click", () => {
     if (searchResult) {
     callWeather(searchResult, true);
     cityNameEl.value = "";
+
     } else {
         alert("Please enter a valid city name")
     }
 })
 
+var recallHistory = function () {
+    if (searchHistory) {
+    for(var i = 0; i < searchHistory.length; i++) {
+    callWeather(searchHistory[i], true);
+    }
+}
+}
+recallHistory();
 
 var futureButton = function (selector, event, handler) {
 
@@ -146,3 +163,7 @@ var futureButton = function (selector, event, handler) {
 //adding the Event Listeners to all secondary buttons
 futureButton('.btn-secondary','click', function () {
 });
+
+clearButtonEl.addEventListener("click", () => {
+    localStorage.clear();
+})
