@@ -11,23 +11,53 @@ console.log(searchEl)
 var callWeather = function (cityName) {
     var apiKey = "3730bc87fdb6ced4e16339afdd4e357b"
     var weatherApi = "https://api.openweathermap.org/data/2.5/weather?q=" + cityName + "&appid=" + apiKey;
-      // make a get request to url
+      
+    // make a get request to url
   fetch(weatherApi).then(function(response) { 
     // request was successful
     if (response.ok) {
-        console.log(response)
       response.json().then(function(data) {
-        // displayRepos(data.items, language);
-        console.log(data.main.temp)
 
         cityTitleEl.innerHTML = "City Name: " + cityName;
         tempEl.innerHTML = "Temp: " + kelvinToFahrenheit(data.main.temp) + "℉";
+        windEl.innerHTML = "Wind: " + data.wind.speed + " MPH";
+        humidityEl.innerHTML = "Humidity: " + data.main.humidity + " %";
 
-      });
+// for calling UV Index
+var lat = data.coord.lat;
+var lon = data.coord.lon;
+var uvApi = "https://api.openweathermap.org/data/2.5/onecall?lat="+ lat +"&lon=" + lon + "&exclude=hourly,daily,minutely&appid=" +apiKey;
+fetch(uvApi).then(function(response) { 
+  // request was successful
+  if (response.ok) {
+    response.json().then(function(data) {
+        console.log(data.current.uvi)
+
+        var uvIndex = document.createElement("span");
+
+        if (data.current.uvi < 3) {
+        uvIndex.classList = ("badge badge-success");
+        } else if (data.current.uvi > 5) {
+        uvIndex.classList = ("badge badge-danger");
+        }
+        else {
+            uvIndex.classList = ("badge badge-warning") ;
+        }
+        uvIndex.innerHTML = data.current.uvi;
+        uvIndexEl.innerHTML = "UV Index: ";
+        uvIndexEl.append(uvIndex);
+    });
+
+  } else {
+      alert("Error: " + response.statusText);
+    }
+})
+      })
     } else {
       alert("Error: " + response.statusText);
     }
   });
+
 }
 
 var kelvinToFahrenheit = function (K) {
