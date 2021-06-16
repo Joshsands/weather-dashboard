@@ -87,19 +87,24 @@ fetch(forecastApi).then(function(response) {
               forecastdateEl = document.createElement("p")
               forecastdateEl.classList = ("mb-0 h5")
               forecastdateEl.innerHTML = (forecastdate)
+              forecastdateEl.setAttribute("class", "forecast-child")
 
               forecastImgEl = document.createElement("img")
               forecastImgEl.setAttribute("src","https://openweathermap.org/img/wn/" + data.list[(i * 8) + 4].weather[0].icon + ".png")
               forecastImgEl.setAttribute("alt", data.list[(i * 8) + 4].weather[0].description);
+              forecastImgEl.setAttribute("class", "forecast-child")
 
               forecastTempEl = document.createElement("p");
               forecastTempEl.innerHTML = "Temp: " + kelvinToFahrenheit(data.list[(i * 8) + 4].main.temp) + "℉";
+              forecastTempEl.setAttribute("class", "forecast-child")
 
               forecastWindEl = document.createElement("p");
               forecastWindEl.innerHTML = "Wind: " + data.list[(i * 8) + 4].wind.speed + " MPH";
+              forecastWindEl.setAttribute("class", "forecast-child")
 
               forecastHumidityEl = document.createElement("p");
               forecastHumidityEl.innerHTML = "Humidity: " + data.list[(i * 8) + 4].main.humidity + " %";
+              forecastHumidityEl.setAttribute("class", "forecast-child")
 
               forecastEl[i].append(forecastdateEl, forecastImgEl, forecastTempEl, forecastWindEl, forecastHumidityEl)
           }
@@ -165,5 +170,20 @@ futureButton('.btn-secondary','click', function () {
 });
 
 clearButtonEl.addEventListener("click", () => {
+  document.querySelectorAll('.btn-secondary').forEach(function(a) {
+    a.remove()
+  })
     localStorage.clear();
+    historySaved = [];
+    cityTitleEl.innerHTML = ""
+    weatherPicEl.setAttribute("src", "");
+    tempEl.innerHTML = "";
+    windEl.innerHTML = "";
+    humidityEl.innerHTML = "";
+    uvIndexEl.innerHTML = "";
+
+    document.querySelectorAll('.forecast-child').forEach(function(a) {
+      a.remove()
+    })
+    
 })
