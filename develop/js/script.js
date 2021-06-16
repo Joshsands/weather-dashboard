@@ -99,9 +99,8 @@ var callWeather = function (cityName, check) {
                   .add(i + 1, "d")
                   .format("L");
                 forecastdateEl = document.createElement("p");
-                forecastdateEl.classList = "mb-0 h5";
                 forecastdateEl.innerHTML = forecastdate;
-                forecastdateEl.setAttribute("class", "forecast-child");
+                forecastdateEl.setAttribute("class", "forecast-child mb-0 h5");
 
                 forecastImgEl = document.createElement("img");
                 forecastImgEl.setAttribute(
