@@ -1,15 +1,53 @@
 .btn {
-    width: 100%;
+  width: 100%;
 }
 
 .btn-secondary {
-    margin-bottom: 20px;
+  margin-bottom: 20px;
 }
 
 .btn-primary {
-    margin-bottom: 10px;
+  margin-bottom: 10px;
 }
 
 .increase-padding {
-    padding: 0 30px;
+  padding: 0 30px;
+}
+
+@media screen and (max-width: 1205px), screen and (max-width: 575px) {
+  .forecast {
+    min-width: 100%;
+  }
+  .forecast-row,
+  .current-weather {
+    max-width: 70%;
+  }
+}
+
+@media screen and (max-width: 768px), screen and (max-width: 575px) {
+  .forecast-row,
+  .current-weather {
+    max-width: 90%;
+  }
+  .form-control {
+    font-size: 0.7rem;
+  }
+}
+
+@media screen and (max-width: 426px), screen and (max-width: 575px) {
+  .form-control {
+    font-size: 0.5rem;
+  }
+  .text-size {
+    font-size: 1rem;
+  }
+}
+
+@media screen and (max-width: 321px), screen and (max-width: 575px) {
+  .btn {
+    font-size: 0.5rem;
+  }
+  .form-control {
+    font-size: 0.3rem;
+  }
 }
